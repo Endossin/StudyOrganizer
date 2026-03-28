@@ -1,0 +1,6 @@
+@StudyOrganizer.API_HostAddress = http://localhost:5097
+
+GET {{StudyOrganizer.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
