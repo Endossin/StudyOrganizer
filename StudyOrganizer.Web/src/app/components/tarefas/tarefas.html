@@ -1,1 +1,49 @@
-<p>tarefas works!</p>
+<div style="padding: 16px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <h2>✅ Tarefas</h2>
+    <button mat-raised-button color="primary" (click)="mostrarFormulario = !mostrarFormulario">
+      + Nova Tarefa
+    </button>
+  </div>
+
+  <mat-card *ngIf="mostrarFormulario" style="margin-bottom: 24px; padding: 16px;">
+    <h3>Nova Tarefa</h3>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Matéria</mat-label>
+      <mat-select [(ngModel)]="novaTarefa.materiaId">
+        <mat-option *ngFor="let m of materias" [value]="m.id">{{ m.nome }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Título</mat-label>
+      <input matInput [(ngModel)]="novaTarefa.titulo" placeholder="Ex: Estudar capítulo 3">
+    </mat-form-field>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Descrição</mat-label>
+      <input matInput [(ngModel)]="novaTarefa.descricao">
+    </mat-form-field>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Data de Vencimento</mat-label>
+      <input matInput type="date" [(ngModel)]="novaTarefa.dataVencimento">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="salvar()">Salvar</button>
+    <button mat-button (click)="mostrarFormulario = false" style="margin-left: 8px;">Cancelar</button>
+  </mat-card>
+
+  <mat-card *ngFor="let t of tarefas" style="margin-bottom: 12px; padding: 16px;">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <mat-checkbox [checked]="t.concluida" (change)="concluir(t)"></mat-checkbox>
+        <div>
+          <p [style.text-decoration]="t.concluida ? 'line-through' : 'none'" style="margin: 0; font-weight: 500;">{{ t.titulo }}</p>
+          <p style="margin: 0; color: gray; font-size: 12px;">{{ t.descricao }}</p>
+        </div>
+      </div>
+      <button mat-icon-button color="warn" (click)="deletar(t.id!)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </mat-card>
+
+  <p *ngIf="tarefas.length === 0" style="color: gray;">Nenhuma tarefa cadastrada ainda.</p>
+</div>

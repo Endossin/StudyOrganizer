@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-progresso',
-  imports: [],
+  standalone: true,
+  imports: [MatCardModule],
   templateUrl: './progresso.html',
-  styleUrl: './progresso.scss',
+  styleUrl: './progresso.scss'
 })
-export class Progresso {}
+export class ProgressoComponent {}

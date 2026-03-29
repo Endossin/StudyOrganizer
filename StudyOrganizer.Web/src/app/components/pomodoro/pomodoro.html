@@ -1,1 +1,24 @@
-<p>pomodoro works!</p>
+<div style="padding: 16px; display: flex; flex-direction: column; align-items: center;">
+  <h2>🍅 Pomodoro</h2>
+
+  <mat-card style="padding: 48px; text-align: center; margin-bottom: 24px; min-width: 300px;">
+    <div style="font-size: 72px; font-weight: bold; margin-bottom: 24px;">
+      {{ tempoFormatado }}
+    </div>
+    <div style="display: flex; gap: 12px; justify-content: center;">
+      <button mat-raised-button color="primary" [hidden]="rodando" (click)="iniciar()">
+        <mat-icon>play_arrow</mat-icon> Iniciar
+      </button>
+      <button mat-raised-button color="warn" [hidden]="!rodando" (click)="parar()">
+        <mat-icon>pause</mat-icon> Pausar
+      </button>
+      <button mat-raised-button (click)="resetar()">
+        <mat-icon>refresh</mat-icon> Resetar
+      </button>
+    </div>
+  </mat-card>
+
+  <mat-card style="padding: 24px; text-align: center; min-width: 300px;">
+    <p style="font-size: 18px; margin: 0;">🍅 Sessões concluídas: <strong>{{ sessoes }}</strong></p>
+  </mat-card>
+</div>

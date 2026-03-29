@@ -1,1 +1,41 @@
-<p>materias works!</p>
+<div style="padding: 16px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <h2>📖 Matérias</h2>
+    <button mat-raised-button color="primary" (click)="mostrarFormulario = !mostrarFormulario">
+      + Nova Matéria
+    </button>
+  </div>
+
+  <mat-card *ngIf="mostrarFormulario" style="margin-bottom: 24px; padding: 16px;">
+    <h3>Nova Matéria</h3>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Nome</mat-label>
+      <input matInput [(ngModel)]="novaMateria.nome" placeholder="Ex: Matemática">
+    </mat-form-field>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Descrição</mat-label>
+      <input matInput [(ngModel)]="novaMateria.descricao" placeholder="Ex: Cálculo diferencial">
+    </mat-form-field>
+    <div style="margin-bottom: 12px;">
+      <label>Cor: </label>
+      <input type="color" [(ngModel)]="novaMateria.cor" style="margin-left: 8px;">
+    </div>
+    <button mat-raised-button color="primary" (click)="salvar()">Salvar</button>
+    <button mat-button (click)="mostrarFormulario = false" style="margin-left: 8px;">Cancelar</button>
+  </mat-card>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
+    <mat-card *ngFor="let m of materias" style="padding: 16px;">
+      <div style="display: flex; align-items: center; margin-bottom: 8px;">
+        <div [style.background]="m.cor" style="width: 16px; height: 16px; border-radius: 50%; margin-right: 8px;"></div>
+        <h3 style="margin: 0;">{{ m.nome }}</h3>
+      </div>
+      <p style="color: gray; margin: 0 0 12px;">{{ m.descricao }}</p>
+      <button mat-icon-button color="warn" (click)="deletar(m.id!)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card>
+  </div>
+
+  <p *ngIf="materias.length === 0" style="color: gray;">Nenhuma matéria cadastrada ainda.</p>
+</div>

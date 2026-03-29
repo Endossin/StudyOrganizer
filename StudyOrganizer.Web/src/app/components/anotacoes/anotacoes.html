@@ -1,1 +1,40 @@
-<p>anotacoes works!</p>
+<div style="padding: 16px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <h2>📝 Anotações</h2>
+    <button mat-raised-button color="primary" (click)="mostrarFormulario = !mostrarFormulario">
+      + Nova Anotação
+    </button>
+  </div>
+
+  <mat-card *ngIf="mostrarFormulario" style="margin-bottom: 24px; padding: 16px;">
+    <h3>Nova Anotação</h3>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Matéria</mat-label>
+      <mat-select [(ngModel)]="novaAnotacao.materiaId">
+        <mat-option *ngFor="let m of materias" [value]="m.id">{{ m.nome }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Título</mat-label>
+      <input matInput [(ngModel)]="novaAnotacao.titulo">
+    </mat-form-field>
+    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+      <mat-label>Conteúdo</mat-label>
+      <textarea matInput [(ngModel)]="novaAnotacao.conteudo" rows="4"></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="salvar()">Salvar</button>
+    <button mat-button (click)="mostrarFormulario = false" style="margin-left: 8px;">Cancelar</button>
+  </mat-card>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+    <mat-card *ngFor="let a of anotacoes" style="padding: 16px;">
+      <h3 style="margin: 0 0 8px;">{{ a.titulo }}</h3>
+      <p style="color: gray; margin: 0 0 12px;">{{ a.conteudo }}</p>
+      <button mat-icon-button color="warn" (click)="deletar(a.id!)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card>
+  </div>
+
+  <p *ngIf="anotacoes.length === 0" style="color: gray;">Nenhuma anotação cadastrada ainda.</p>
+</div>
