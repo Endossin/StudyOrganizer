@@ -1,24 +1,108 @@
-<div style="padding: 16px; display: flex; flex-direction: column; align-items: center;">
-  <h2>🍅 Pomodoro</h2>
+<div style="padding: 32px; display: flex; flex-direction: column; align-items: center;">
+  
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 40px;">
+    <span style="font-size: 32px;">🍅</span>
+    <h2 style="margin: 0; font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #7c6af7, #4caf50); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pomodoro Timer</h2>
+  </div>
 
-  <mat-card style="padding: 48px; text-align: center; margin-bottom: 24px; min-width: 300px;">
-    <div style="font-size: 72px; font-weight: bold; margin-bottom: 24px;">
-      {{ tempoFormatado }}
-    </div>
-    <div style="display: flex; gap: 12px; justify-content: center;">
-      <button mat-raised-button color="primary" [hidden]="rodando" (click)="iniciar()">
-        <mat-icon>play_arrow</mat-icon> Iniciar
-      </button>
-      <button mat-raised-button color="warn" [hidden]="!rodando" (click)="parar()">
-        <mat-icon>pause</mat-icon> Pausar
-      </button>
-      <button mat-raised-button (click)="resetar()">
-        <mat-icon>refresh</mat-icon> Resetar
-      </button>
-    </div>
-  </mat-card>
+  <div style="display: flex; gap: 20px; margin-bottom: 28px; flex-wrap: wrap; justify-content: center;">
 
-  <mat-card style="padding: 24px; text-align: center; min-width: 300px;">
-    <p style="font-size: 18px; margin: 0;">🍅 Sessões concluídas: <strong>{{ sessoes }}</strong></p>
-  </mat-card>
+    
+    <div style="background: linear-gradient(135deg, #1e1e2e, #2a2040); border: 1px solid #7c6af744; border-radius: 20px; padding: 36px 40px; text-align: center; min-width: 280px; box-shadow: 0 8px 32px rgba(124,106,247,0.15);">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px;">
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #7c6af7; display: inline-block; box-shadow: 0 0 8px #7c6af7;"></span>
+        <span style="color: #7c6af7; font-weight: 700; font-size: 13px; letter-spacing: 3px; text-transform: uppercase;">Estudo</span>
+      </div>
+      <div style="font-size: 76px; font-weight: 800; color: #fff; letter-spacing: 2px; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums;">
+        {{tempoFormatado(minutosEstudo, segundosEstudo)}}
+      </div>
+      <div style="height: 3px; background: #7c6af733; border-radius: 2px; margin: 16px 0; overflow: hidden;">
+        <div [style.width]="progressoEstudo + '%'" style="height: 100%; background: linear-gradient(90deg, #7c6af7, #9b8dff); border-radius: 2px; transition: width 1s linear;"></div>
+      </div>
+      <p style="color: #a0a0b8; font-size: 13px; margin: 0 0 20px 0;">{{ modoAtual === 'estudo' && rodando ? '▶ Rodando...' : '⏸ Parado' }}</p>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button (click)="toggleTimer('estudo')"
+          [style.background]="modoAtual === 'estudo' && rodando ? 'linear-gradient(135deg,#f44336,#e53935)' : 'linear-gradient(135deg,#7c6af7,#9b8dff)'"
+          style="color: white; border: none; padding: 10px 24px; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ modoAtual === 'estudo' && rodando ? 'pause' : 'play_arrow' }}</mat-icon>
+          {{ modoAtual === 'estudo' && rodando ? 'Pausar' : 'Iniciar' }}
+        </button>
+        <button (click)="resetarTimer('estudo')"
+          style="background: transparent; border: 1px solid #2e2e42; color: #a0a0b8; padding: 10px 14px; border-radius: 50px; cursor: pointer; transition: all 0.2s;">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  
+    <div style="background: linear-gradient(135deg, #1e1e2e, #1a2e20); border: 1px solid #4caf5044; border-radius: 20px; padding: 36px 40px; text-align: center; min-width: 280px; box-shadow: 0 8px 32px rgba(76,175,80,0.15);">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px;">
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #4caf50; display: inline-block; box-shadow: 0 0 8px #4caf50;"></span>
+        <span style="color: #4caf50; font-weight: 700; font-size: 13px; letter-spacing: 3px; text-transform: uppercase;">Descanso</span>
+      </div>
+      <div style="font-size: 76px; font-weight: 800; color: #fff; letter-spacing: 2px; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums;">
+        {{tempoFormatado(minutosDescanso, segundosDescanso)}}
+      </div>
+      <div style="height: 3px; background: #4caf5033; border-radius: 2px; margin: 16px 0; overflow: hidden;">
+        <div [style.width]="progressoDescanso + '%'" style="height: 100%; background: linear-gradient(90deg, #4caf50, #81c784); border-radius: 2px; transition: width 1s linear;"></div>
+      </div>
+      <p style="color: #a0a0b8; font-size: 13px; margin: 0 0 20px 0;">{{ modoAtual === 'descanso' && rodando ? '▶ Rodando...' : '⏸ Parado' }}</p>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button (click)="toggleTimer('descanso')"
+          [style.background]="modoAtual === 'descanso' && rodando ? 'linear-gradient(135deg,#f44336,#e53935)' : 'linear-gradient(135deg,#4caf50,#66bb6a)'"
+          style="color: white; border: none; padding: 10px 24px; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ modoAtual === 'descanso' && rodando ? 'pause' : 'play_arrow' }}</mat-icon>
+          {{ modoAtual === 'descanso' && rodando ? 'Pausar' : 'Iniciar' }}
+        </button>
+        <button (click)="resetarTimer('descanso')"
+          style="background: transparent; border: 1px solid #2e2e42; color: #a0a0b8; padding: 10px 14px; border-radius: 50px; cursor: pointer; transition: all 0.2s;">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="background: #1e1e2e; border: 1px solid #2e2e42; border-radius: 16px; padding: 24px 32px; width: 100%; max-width: 620px; margin-bottom: 20px;">
+    <p style="margin: 0 0 20px 0; font-weight: 700; color: #e2e2e2; font-size: 15px;">⚙️ Configurar Tempos</p>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 160px;">
+        <label style="color: #a0a0b8; font-size: 13px; display: block; margin-bottom: 8px;">⏱ Estudo (minutos)</label>
+        <input type="number" [(ngModel)]="configEstudo" min="1" max="120" (change)="aplicarConfig()"
+          style="width: 100%; background: #0f0f13; border: 1px solid #2e2e42; border-radius: 10px; padding: 12px 16px; color: #e2e2e2; font-size: 16px; outline: none;">
+      </div>
+      <div style="flex: 1; min-width: 160px;">
+        <label style="color: #a0a0b8; font-size: 13px; display: block; margin-bottom: 8px;">☕ Descanso (minutos)</label>
+        <input type="number" [(ngModel)]="configDescanso" min="1" max="60" (change)="aplicarConfig()"
+          style="width: 100%; background: #0f0f13; border: 1px solid #2e2e42; border-radius: 10px; padding: 12px 16px; color: #e2e2e2; font-size: 16px; outline: none;">
+      </div>
+    </div>
+  </div>
+
+  
+  <div style="background: #1e1e2e; border: 1px solid #2e2e42; border-radius: 16px; padding: 18px 40px; text-align: center;">
+    <p style="font-size: 17px; margin: 0; color: #a0a0b8;">
+      🍅 Sessões concluídas: <strong style="color: #7c6af7; font-size: 24px; font-weight: 800;">{{ sessoes }}</strong>
+    </p>
+  </div>
+
+  <div *ngIf="mostrarCelebracao"
+    style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); z-index: 9999; animation: fadeIn 0.3s ease;">
+    <div style="text-align: center; animation: bounce 0.5s ease infinite alternate;">
+      <div style="font-size: 80px; margin-bottom: 16px;">🎉</div>
+      <h2 style="font-size: 32px; font-weight: 800; color: #7c6af7; margin: 0 0 8px 0;">Sessão concluída!</h2>
+      <p style="color: #a0a0b8; font-size: 18px; margin: 0 0 24px 0;">Incrível! Você completou mais uma sessão de estudo 🚀</p>
+      <div style="font-size: 40px;">⭐🏆⭐</div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarAlertaDescanso"
+    style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); z-index: 9999;">
+    <div style="text-align: center;">
+      <div style="font-size: 80px; margin-bottom: 16px;">⏰</div>
+      <h2 style="font-size: 32px; font-weight: 800; color: #4caf50; margin: 0 0 8px 0;">Descanso encerrado!</h2>
+      <p style="color: #a0a0b8; font-size: 18px; margin: 0 0 24px 0;">Hora de voltar aos estudos! Você consegue 💪</p>
+      <div style="font-size: 40px;">📚✏️🎯</div>
+    </div>
+  </div>
 </div>

@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { TarefaService, Tarefa } from '../../services/tarefa';
-import { MateriaService, Materia } from '../../services/materia';
+import { MateriasService, Materia } from '../../services/materia';
 
 @Component({
   selector: 'app-tarefas',
@@ -21,10 +21,10 @@ import { MateriaService, Materia } from '../../services/materia';
 export class TarefasComponent implements OnInit {
   tarefas: Tarefa[] = [];
   materias: Materia[] = [];
-  novaTarefa: Tarefa = { materiaId: 0, titulo: '', descricao: '', concluida: false };
+  novaTarefa: Tarefa = { materialId: 0, titulo: '', descricao: '', concludia: false, prioridade: 'media' };
   mostrarFormulario = false;
 
-  constructor(private tarefaService: TarefaService, private materiaService: MateriaService) {}
+  constructor(private tarefaService: TarefaService, private materiaService: MateriasService) {}
 
   ngOnInit() {
     this.carregar();
@@ -37,18 +37,30 @@ export class TarefasComponent implements OnInit {
 
   salvar() {
     this.tarefaService.create(this.novaTarefa).subscribe(() => {
-      this.novaTarefa = { materiaId: 0, titulo: '', descricao: '', concluida: false };
+      this.novaTarefa = { materialId: 0, titulo: '', descricao: '', concludia: false, prioridade: 'media' };
       this.mostrarFormulario = false;
       this.carregar();
     });
   }
 
   concluir(tarefa: Tarefa) {
-    tarefa.concluida = !tarefa.concluida;
+    tarefa.concludia = !tarefa.concludia;
     this.tarefaService.update(tarefa.id!, tarefa).subscribe();
   }
 
   deletar(id: number) {
     this.tarefaService.delete(id).subscribe(() => this.carregar());
+  }
+
+  getPrioridadeCor(prioridade?: string): string {
+    if (prioridade === 'alta') return '#f44336';
+    if (prioridade === 'media') return '#ff9800';
+    return '#4caf50';
+  }
+
+  getPrioridadeLabel(prioridade?: string): string {
+    if (prioridade === 'alta') return '🔴 Alta';
+    if (prioridade === 'media') return '🟡 Média';
+    return '🟢 Baixa';
   }
 }

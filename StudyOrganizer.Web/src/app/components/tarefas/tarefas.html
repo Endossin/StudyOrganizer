@@ -1,49 +1,80 @@
-<div style="padding: 16px;">
+<div style="padding: 24px;">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-    <h2>✅ Tarefas</h2>
-    <button mat-raised-button color="primary" (click)="mostrarFormulario = !mostrarFormulario">
-      + Nova Tarefa
+    <h2 style="margin: 0; font-size: 24px; font-weight: 700;">✅ Tarefas</h2>
+    <button mat-raised-button (click)="mostrarFormulario = true"
+      style="background: var(--accent); color: white; border-radius: 8px;">
+      <mat-icon>add</mat-icon> Nova Tarefa
     </button>
   </div>
 
-  <mat-card *ngIf="mostrarFormulario" style="margin-bottom: 24px; padding: 16px;">
-    <h3>Nova Tarefa</h3>
-    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+  <mat-card *ngIf="mostrarFormulario" style="margin-bottom: 24px; padding: 24px;">
+    <h3 style="margin: 0 0 16px 0; color: var(--accent);">Nova Tarefa</h3>
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
       <mat-label>Matéria</mat-label>
-      <mat-select [(ngModel)]="novaTarefa.materiaId">
+      <mat-select [(ngModel)]="novaTarefa.materialId">
         <mat-option *ngFor="let m of materias" [value]="m.id">{{ m.nome }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
       <mat-label>Título</mat-label>
-      <input matInput [(ngModel)]="novaTarefa.titulo" placeholder="Ex: Estudar capítulo 3">
+      <input matInput [(ngModel)]="novaTarefa.titulo">
     </mat-form-field>
-    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
       <mat-label>Descrição</mat-label>
       <input matInput [(ngModel)]="novaTarefa.descricao">
     </mat-form-field>
-    <mat-form-field style="width: 100%; margin-bottom: 12px;">
-      <mat-label>Data de Vencimento</mat-label>
-      <input matInput type="date" [(ngModel)]="novaTarefa.dataVencimento">
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="salvar()">Salvar</button>
-    <button mat-button (click)="mostrarFormulario = false" style="margin-left: 8px;">Cancelar</button>
-  </mat-card>
-
-  <mat-card *ngFor="let t of tarefas" style="margin-bottom: 12px; padding: 16px;">
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <mat-checkbox [checked]="t.concluida" (change)="concluir(t)"></mat-checkbox>
-        <div>
-          <p [style.text-decoration]="t.concluida ? 'line-through' : 'none'" style="margin: 0; font-weight: 500;">{{ t.titulo }}</p>
-          <p style="margin: 0; color: gray; font-size: 12px;">{{ t.descricao }}</p>
-        </div>
-      </div>
-      <button mat-icon-button color="warn" (click)="deletar(t.id!)">
-        <mat-icon>delete</mat-icon>
-      </button>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <mat-form-field appearance="outline" style="flex: 1; min-width: 160px;">
+        <mat-label>Data de Vencimento</mat-label>
+        <input matInput type="date" [(ngModel)]="novaTarefa.dataVencimento">
+      </mat-form-field>
+      <mat-form-field appearance="outline" style="flex: 1; min-width: 160px;">
+        <mat-label>Prioridade</mat-label>
+        <mat-select [(ngModel)]="novaTarefa.prioridade">
+          <mat-option value="baixa">🟢 Baixa</mat-option>
+          <mat-option value="media">🟡 Média</mat-option>
+          <mat-option value="alta">🔴 Alta</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 8px;">
+      <button mat-raised-button (click)="salvar()" style="background: var(--accent); color: white;">Salvar</button>
+      <button mat-stroked-button (click)="mostrarFormulario = false">Cancelar</button>
     </div>
   </mat-card>
 
-  <p *ngIf="tarefas.length === 0" style="color: gray;">Nenhuma tarefa cadastrada ainda.</p>
+  <div *ngIf="tarefas.length === 0" style="color: var(--text-secondary); text-align: center; margin-top: 48px;">
+    <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: var(--border);">check_circle</mat-icon>
+    <p>Nenhuma tarefa cadastrada ainda.</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div *ngFor="let t of tarefas"
+      style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px;"
+      [style.border-left]="'4px solid ' + getPrioridadeCor(t.prioridade)">
+
+      <mat-checkbox [checked]="t.concludia" (change)="concluir(t)" style="flex-shrink: 0;"></mat-checkbox>
+
+      <div style="flex: 1;">
+        <p [style.text-decoration]="t.concludia ? 'line-through' : 'none'"
+          [style.color]="t.concludia ? 'var(--text-secondary)' : 'var(--text-primary)'"
+          style="margin: 0; font-weight: 600; font-size: 15px;">{{ t.titulo }}</p>
+        <p *ngIf="t.descricao" style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 13px;">{{ t.descricao }}</p>
+        <div style="display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap;">
+          <span *ngIf="t.dataVencimento" style="font-size: 12px; color: var(--text-secondary);">
+            📅 {{ t.dataVencimento | date:'dd/MM/yyyy' }}
+          </span>
+          <span *ngIf="t.prioridade"
+            [style.color]="getPrioridadeCor(t.prioridade)"
+            style="font-size: 12px; font-weight: 600;">
+            {{ getPrioridadeLabel(t.prioridade) }}
+          </span>
+        </div>
+      </div>
+
+      <button mat-icon-button (click)="deletar(t.id!)" style="color: var(--danger); flex-shrink: 0;">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
 </div>

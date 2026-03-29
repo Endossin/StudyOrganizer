@@ -4,11 +4,12 @@ import { Observable } from 'rxjs';
 
 export interface Tarefa {
   id?: number;
-  materiaId: number;
+  materialId: number;
   titulo: string;
   descricao?: string;
-  concluida?: boolean;
+  concludia?: boolean;
   dataVencimento?: string;
+  prioridade?: 'baixa' | 'media' | 'alta';
 }
 
 @Injectable({ providedIn: 'root' })

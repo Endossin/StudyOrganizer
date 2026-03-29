@@ -1,41 +1,51 @@
-<div style="padding: 16px;">
+<div style="padding: 24px;">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-    <h2>📖 Matérias</h2>
-    <button mat-raised-button color="primary" (click)="mostrarFormulario = !mostrarFormulario">
-      + Nova Matéria
+    <h2 style="margin: 0; font-size: 24px; font-weight: 700;">📚 Matérias</h2>
+    <button mat-raised-button (click)="mostrarFormulario = true"
+      style="background: var(--accent); color: white; border-radius: 8px;">
+      <mat-icon>add</mat-icon> Nova Matéria
     </button>
   </div>
 
-  <mat-card *ngIf="mostrarFormulario" style="margin-bottom: 24px; padding: 16px;">
-    <h3>Nova Matéria</h3>
-    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+  <mat-card *ngIf="mostrarFormulario" style="margin-bottom: 24px; padding: 24px;">
+    <h3 style="margin: 0 0 16px 0; color: var(--accent);">Nova Matéria</h3>
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 8px;">
       <mat-label>Nome</mat-label>
-      <input matInput [(ngModel)]="novaMateria.nome" placeholder="Ex: Matemática">
+      <input matInput [(ngModel)]="novaMateria.nome">
     </mat-form-field>
-    <mat-form-field style="width: 100%; margin-bottom: 12px;">
+    <mat-form-field appearance="outline" style="width: 100%;">
       <mat-label>Descrição</mat-label>
-      <input matInput [(ngModel)]="novaMateria.descricao" placeholder="Ex: Cálculo diferencial">
+      <input matInput [(ngModel)]="novaMateria.descricao">
     </mat-form-field>
-    <div style="margin-bottom: 12px;">
-      <label>Cor: </label>
-      <input type="color" [(ngModel)]="novaMateria.cor" style="margin-left: 8px;">
+    <div style="display: flex; align-items: center; gap: 12px; margin: 12px 0;">
+      <label style="color: var(--text-secondary);">Cor:</label>
+      <input type="color" [(ngModel)]="novaMateria.cor" style="width: 48px; height: 32px; border-radius: 6px; border: none; cursor: pointer;">
     </div>
-    <button mat-raised-button color="primary" (click)="salvar()">Salvar</button>
-    <button mat-button (click)="mostrarFormulario = false" style="margin-left: 8px;">Cancelar</button>
+    <div style="display: flex; gap: 8px; margin-top: 8px;">
+      <button mat-raised-button (click)="salvar()" style="background: var(--accent); color: white;">Salvar</button>
+      <button mat-stroked-button (click)="mostrarFormulario = false">Cancelar</button>
+    </div>
   </mat-card>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
-    <mat-card *ngFor="let m of materias" style="padding: 16px;">
-      <div style="display: flex; align-items: center; margin-bottom: 8px;">
-        <div [style.background]="m.cor" style="width: 16px; height: 16px; border-radius: 50%; margin-right: 8px;"></div>
-        <h3 style="margin: 0;">{{ m.nome }}</h3>
-      </div>
-      <p style="color: gray; margin: 0 0 12px;">{{ m.descricao }}</p>
-      <button mat-icon-button color="warn" (click)="deletar(m.id!)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </mat-card>
+  <div *ngIf="materias.length === 0" style="color: var(--text-secondary); text-align: center; margin-top: 48px;">
+    <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: var(--border);">menu_book</mat-icon>
+    <p>Nenhuma matéria cadastrada ainda.</p>
   </div>
 
-  <p *ngIf="materias.length === 0" style="color: gray;">Nenhuma matéria cadastrada ainda.</p>
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
+    <mat-card *ngFor="let m of materias" style="padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span [style.background]="m.cor" style="width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span>
+            <strong style="font-size: 16px;">{{m.nome}}</strong>
+          </div>
+          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">{{m.descricao}}</p>
+        </div>
+        <button mat-icon-button (click)="deletar(m.id!)" style="color: var(--danger);">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  </div>
 </div>
